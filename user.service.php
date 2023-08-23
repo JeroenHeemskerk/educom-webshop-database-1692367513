@@ -1,5 +1,6 @@
 <?php
 include "users.repository.php";
+include_once "sessions.php";
 function AuthorizeUser($email, $password){
     $user = FindUserByEmail($email);
     if(empty($user)){
@@ -14,8 +15,12 @@ function DoesEmailExist($email){
     $user = FindUserByEmail($email);
     return !empty($user);
 }
-function StoreUser($email, $name, $password){
-    SaveUser($email, $name, $password);
+function StoreUser($email, $name, $password, $databaseErr){
+    SaveUser($email, $name, $password, $databaseErr);
+}
+function UpdatePassword($password){
+    $email = getLogInEmail();
+    UpdateUser($password, $email);
 }
 function TestInput($data) {
     $data = trim($data);

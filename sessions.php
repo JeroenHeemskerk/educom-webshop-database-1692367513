@@ -2,6 +2,7 @@
 session_start();
 function LoginUser($data) {
     $_SESSION['name'] = $data["name"];
+    $_SESSION['email'] = $data["email"];
 }
 function LogoutUser() {
     session_unset();
@@ -16,4 +17,7 @@ function IsUserLogIn() {
 }
 function getLogInUsername() {
     return $_SESSION['name'];
+}
+function getLogInEmail() {
+    return $_SESSION['email'];
 }

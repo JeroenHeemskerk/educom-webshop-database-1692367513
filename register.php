@@ -1,7 +1,7 @@
 <?php 
 include_once "user.service.php";
 function CheckRegister() {
-    $nameErr = $emailErr = $passwordErr = $passwordcheckErr = "";
+    $nameErr = $emailErr = $passwordErr = $passwordcheckErr = $databaseErr = "";
     $name = TestInput(getPostVar('name'));
     $email = TestInput(getPostVar('email'));
     $password = TestInput(getPostVar('password'));
@@ -39,7 +39,7 @@ function CheckRegister() {
     }
 
     return array ("registervalid"=> $registervalid, "name" => $name, "email" => $email, "password" => $password, "passwordcheck" => $passwordcheck, 
-    "nameErr" => $nameErr, "emailErr" => $emailErr, "passwordErr" => $passwordErr, "passwordcheckErr" => $passwordcheckErr);
+    "nameErr" => $nameErr, "emailErr" => $emailErr, "passwordErr" => $passwordErr, "passwordcheckErr" => $passwordcheckErr, "databaseErr" => $databaseErr);
 }
 
 function ShowRegisterForm($data) { echo '
@@ -77,5 +77,6 @@ function ShowRegisterForm($data) { echo '
         </div>
         <div>
             <input type="submit" value="verstuur">
+            '. $data['databaseErr'] . '
         </div>
 ';}

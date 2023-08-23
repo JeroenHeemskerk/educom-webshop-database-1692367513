@@ -2,12 +2,14 @@
 include_once "user.service.php";
 function CheckLogin() {
     $emailErr = $passwordErr  = "";
-    $email = $password = $name = "";
+    $name = TestInput(getPostVar('name'));
+    $email = TestInput(getPostVar('email'));
+    $password = TestInput(getPostVar('password'));
     $loginvalid = false;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = AuthorizeUser($_POST['email'], $_POST['password']);
             if($user == null){
-                $emailErr = "email bestaat niet in het database";
+                $emailErr = "deze email is niet gevonden in het database";
             }elseif($user == "error"){
                 $passwordErr = "wachtwoord hoort niet bij deze email";
             }else{

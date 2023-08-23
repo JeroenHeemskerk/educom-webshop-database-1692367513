@@ -1,7 +1,8 @@
 <?php
-include 'sessions.php';
+include_once 'sessions.php';
 include 'login.php';
 include 'register.php';
+include 'changepassword.php';
 $page = GetRequestedPage();
 $data = ProcessRequest($page);
 ShowResponsePage($data);
@@ -11,7 +12,7 @@ function ProcessRequest($page){
         case 'register':
             $data = CheckRegister();
             if($data['registervalid']){
-                StoreUser($data['email'], $data['name'], $data['password']);
+                StoreUser($data['email'], $data['name'], $data['password'], $data['databaseErr']);
                 $page = 'login';
                 $data['loginvalid'] = "";
             }
@@ -26,6 +27,13 @@ function ProcessRequest($page){
         case 'logout':
             LogoutUser();
             $page = 'home';
+            break;
+        case 'changepassword':
+            $data = ChangePassword();
+            if($data['passwordvalid']){
+                UpdatePassword($data['password']);
+                $page = 'home';
+            }
             break;
     }
     $data['page'] = $page;
@@ -106,6 +114,9 @@ function ShowHeader($data){
         case 'login':
             Echo '<h1>Login</h1>';
             break;
+        case 'changepassword':
+            Echo '<h1>Verander wachtwoord</h1>';
+            break;
     }
 }
 
@@ -115,6 +126,7 @@ function ShowMenu(){
     Showmenuitem('about', 'About');
     Showmenuitem('contact', 'Contact');
     if(IsUserLogIn()){
+        Showmenuitem('changepassword', 'Verander wachtwoord');
         Showmenuitem('logout', 'Logout ', getLogInUsername());
     }else{
         Showmenuitem('register', 'Registeer');
@@ -151,6 +163,9 @@ function ShowContent($data){
         case 'login':
             ShowLoginContent($data);
             break;
+        case 'changepassword':
+            ShowPasswordContent($data);
+            break;
     }
 }
 
@@ -163,6 +178,12 @@ function ShowRegisterContent($data){
 function ShowLoginContent($data){
     if($data['loginvalid'] == false){
         ShowLoginForm($data);
+    }
+}
+
+function ShowPasswordContent($data){
+    if($data['passwordvalid'] == false){
+        ShowPasswordForm($data);
     }
 }
 
