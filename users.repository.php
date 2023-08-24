@@ -7,7 +7,7 @@ function FindUserByEmail($email){
     $dbname = "stijn_webshop";
     $conn = new mysqli($servername, $username, $sqlpassword, $dbname);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        throw new Exception("Er is geen verbinden gevonden met het database");
     }
     $sql = "SELECT naam, email, wachtwoord FROM users WHERE email='$email'";
     $result = $conn->query($sql);
@@ -28,7 +28,7 @@ function FindPassword($password){
     $dbname = "stijn_webshop";
     $conn = new mysqli($servername, $username, $sqlpassword, $dbname);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        throw new Exception("Er is geen verbinden gevonden met het database");
     }
     $sql = "SELECT naam, email, wachtwoord FROM users WHERE wachtwoord='$password'";
     $result = $conn->query($sql);
@@ -47,14 +47,12 @@ function SaveUser($email, $name, $password, $databaseErr){
     $dbname = "stijn_webshop";
     $conn = new mysqli($servername, $username, $sqlpassword, $dbname);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-      } 
+        throw new Exception("Er is geen verbinden gevonden met het database");
+    }
     $sql = "INSERT INTO users (naam, email, wachtwoord)
     VALUES ('$name', '$email', '$password')";
-    if ($conn->query($sql) === TRUE) {
-        #echo "New record created successfully";
-      } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+    if ($conn->query($sql) === FALSE) {
+        throw new Exception("Het is niet gelukt om het in het database te zetten");
       }
     $conn->close();
 }
@@ -66,13 +64,11 @@ function UpdateUser($password, $email){
     $dbname = "stijn_webshop";
     $conn = new mysqli($servername, $username, $sqlpassword, $dbname);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        throw new Exception("Er is geen verbinden gevonden met het database");
       } 
     $sql = "UPDATE users SET wachtwoord='$password' WHERE email='$email'";
-    if ($conn->query($sql) === TRUE) {
-        #echo "account is geupdated";
-      } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+    if ($conn->query($sql) === FALSE) {
+        throw new Exception("Het is niet gelukt om het in het database te zetten");
       }
     $conn->close();
 }

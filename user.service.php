@@ -2,7 +2,12 @@
 include "users.repository.php";
 include_once "sessions.php";
 function AuthorizeUser($email, $password){
+    try{
     $user = FindUserByEmail($email);
+    }
+    catch(Exception $e){
+        $data['genericErr'] = 'sorry er is een technische storing';
+    }
     if(empty($user)){
         return null;
     }
@@ -12,7 +17,12 @@ function AuthorizeUser($email, $password){
     return $user;
 }
 function DoesEmailExist($email){
+    try{
     $user = FindUserByEmail($email);
+    }
+    catch(Exception $e){
+        $data['genericErr'] = 'sorry er is een technische storing';
+    }
     return !empty($user);
 }
 function StoreUser($email, $name, $password, $databaseErr){

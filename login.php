@@ -1,7 +1,7 @@
 <?php 
 include_once "user.service.php";
 function CheckLogin() {
-    $emailErr = $passwordErr  = "";
+    $emailErr = $passwordErr = $genericErr  = "";
     $name = TestInput(getPostVar('name'));
     $email = TestInput(getPostVar('email'));
     $password = TestInput(getPostVar('password'));
@@ -18,7 +18,7 @@ function CheckLogin() {
             }
         }
     return array ("loginvalid"=> $loginvalid, "email" => $email, "password" => $password, 
-    "emailErr" => $emailErr, "passwordErr" => $passwordErr, "name" => $name);
+    "emailErr" => $emailErr, "passwordErr" => $passwordErr, "genericErr" => $genericErr, "name" => $name);
 }
 
 function ShowLoginForm($data) { echo '

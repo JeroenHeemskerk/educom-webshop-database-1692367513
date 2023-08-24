@@ -8,13 +8,20 @@ $data = ProcessRequest($page);
 ShowResponsePage($data);
 
 function ProcessRequest($page){
+    $data['genericErr'] = "";
     switch ($page){
         case 'register':
             $data = CheckRegister();
             if($data['registervalid']){
+                try{
                 StoreUser($data['email'], $data['name'], $data['password'], $data['databaseErr']);
                 $page = 'login';
                 $data['loginvalid'] = "";
+                }
+                catch(Exception $e){
+                    $data['genericErr'] = 'sorry er is een technische storing';
+                    #ShowLog("Store Userfailed, " . $e->getMessage());
+                }
             }
             break;
         case 'login':
@@ -31,8 +38,13 @@ function ProcessRequest($page){
         case 'changepassword':
             $data = ChangePassword();
             if($data['passwordvalid']){
+                try{
                 UpdatePassword($data['password']);
                 $page = 'home';
+                }
+                catch(Exception $e){
+                    $data['genericErr'] = 'sorry er is een technische storing';
+                }
             }
             break;
     }
@@ -85,6 +97,7 @@ function ShowBodySection($data) {
    echo '    <body>' . PHP_EOL; 
    ShowHeader($data);
    ShowMenu(); 
+   ShowGenericErr($data);
    ShowContent($data); 
    ShowFooter(); 
    echo '    </body>' . PHP_EOL; 
@@ -137,6 +150,10 @@ function ShowMenu(){
 
 function Showmenuitem($name, $message, $username = ''){
     echo'<li class="menuitem"><a href="index.php?page=';echo $name; echo'">';echo $message, $username; echo'</a></li>';
+}
+
+function ShowGenericErr($data){
+    echo '<span class="error">' . $data['genericErr'] . '</span>';
 }
 
 function ShowContent($data){

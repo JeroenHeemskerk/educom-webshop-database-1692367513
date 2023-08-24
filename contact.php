@@ -1,7 +1,7 @@
 <?php
 include_once "user.service.php";
 function ValidateContact() {
-    $firstnameErr = $lastnameErr = $emailErr = $phoneErr = $comprefErr = $feedbackErr = $prefErr = "";
+    $firstnameErr = $lastnameErr = $emailErr = $phoneErr = $comprefErr = $feedbackErr = $prefErr = $genericErr = "";
     $pref = TestInput(getPostVar('Pref'));
     $firstname = TestInput(getPostVar('Firstname'));
     $lastname = TestInput(getPostVar('Lastname'));
@@ -52,7 +52,7 @@ function ValidateContact() {
     }
     return array ("valid"=> $valid, "firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone,
      "compref" => $compref, "feedback" => $feedback, "pref" => $pref, "firstnameErr" => $firstnameErr, "lastnameErr" => $lastnameErr, 
-     "emailErr" => $emailErr, "phoneErr" => $phoneErr, "comprefErr" => $comprefErr, "feedbackErr" => $feedbackErr, "prefErr" => $prefErr,);
+     "emailErr" => $emailErr, "phoneErr" => $phoneErr, "comprefErr" => $comprefErr, "feedbackErr" => $feedbackErr, "prefErr" => $prefErr, "genericErr" => $genericErr);
 }
     function ShowFormContent($data) {echo '   
         <form action="index.php" method="post">

@@ -2,7 +2,7 @@
 include_once 'sessions.php';
 include_once "user.service.php";
 function ChangePassword() {
-    $oldpasswordErr = $passwordErr = $passwordcheckErr = "";
+    $oldpasswordErr = $passwordErr = $passwordcheckErr = $genericErr = "";
     $oldpassword = TestInput(getPostVar('oldpassword'));
     $password = TestInput(getPostVar('password'));
     $passwordcheck = TestInput(getPostVar('passwordcheck'));
@@ -18,7 +18,12 @@ function ChangePassword() {
         if (empty($oldpassword)) {
             $oldpasswordErr = "wachtwoord is verplicht";
         } else {
+            try{
             $user = AuthorizeUser(getLogInEmail() ,$oldpassword);
+            }
+            catch(Exception $e){
+                $genericErr = 'sorry er is een technische storing';
+            }
                 if($user == "error"){
                     $oldpasswordErr = "deze wachtwoord hoort niet bij dit account";
                 }         
@@ -28,7 +33,7 @@ function ChangePassword() {
         }
     }
     return array ("passwordvalid"=> $passwordvalid, "oldpassword" => $oldpassword, "password" => $password, "passwordcheck" => $passwordcheck,
-    "oldpasswordErr" => $oldpasswordErr, "passwordErr" => $passwordErr, "passwordcheckErr" => $passwordcheckErr);
+    "oldpasswordErr" => $oldpasswordErr, "passwordErr" => $passwordErr, "passwordcheckErr" => $passwordcheckErr, "genericErr" => $genericErr);
 }
 
 function ShowPasswordForm($data) {echo '
