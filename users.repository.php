@@ -15,6 +15,7 @@ function ConnectDB(){
 function FindUserByEmail($email){
     $conn = ConnectDB();
     try {
+        $email = $conn->real_escape_string($email);
         $sql = "SELECT naam, email, wachtwoord FROM users WHERE email='$email'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
@@ -31,6 +32,9 @@ function FindUserByEmail($email){
 function SaveUser($email, $name, $password, $databaseErr){
     $conn = ConnectDB();
     try {
+        $name = $conn->real_escape_string($name);
+        $email = $conn->real_escape_string($email);
+        $password = $conn->real_escape_string($password);
         $sql = "INSERT INTO users (naam, email, wachtwoord)
         VALUES ('$name', '$email', '$password')";
         if (mysqli_query($conn, $sql) === FALSE) {
@@ -43,6 +47,8 @@ function SaveUser($email, $name, $password, $databaseErr){
 function UpdateUser($password, $email){
     $conn = ConnectDB();
     try {
+        $password = $conn->real_escape_string($password);
+        $email = $conn->real_escape_string($email);
         $sql = "UPDATE users SET wachtwoord='$password' WHERE email='$email'";
         if (mysqli_query($conn, $sql) === FALSE) {
             throw new Exception("Het is niet gelukt om het in het database te zetten");
