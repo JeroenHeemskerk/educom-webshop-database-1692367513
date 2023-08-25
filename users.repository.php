@@ -25,17 +25,6 @@ function FindUserByEmail($email){
     }
     mysqli_close($conn);
 }
-function FindPassword($password){
-    $conn = ConnectDB();
-    $sql = "SELECT naam, email, wachtwoord FROM users WHERE wachtwoord='$password'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        return true;
-    } else {
-        return null;
-    }
-    mysqli_close($conn);
-}
 function SaveUser($email, $name, $password, $databaseErr){
     $conn = ConnectDB();
     $sql = "INSERT INTO users (naam, email, wachtwoord)
