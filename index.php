@@ -1,5 +1,6 @@
 <?php
 include_once 'sessions.php';
+include_once "product.service.php";
 include 'login.php';
 include 'register.php';
 include 'changepassword.php';
@@ -130,6 +131,12 @@ function ShowHeader($data){
         case 'changepassword':
             Echo '<h1>Verander wachtwoord</h1>';
             break;
+        case 'webshop':
+            Echo '<h1>webshop</h1>';
+            break;
+        case 'webshopitem':
+            Echo '<h1>details</h1>';
+            break;
     }
 }
 
@@ -138,6 +145,7 @@ function ShowMenu(){
     Showmenuitem('home', 'Home');
     Showmenuitem('about', 'About');
     Showmenuitem('contact', 'Contact');
+    Showmenuitem('webshop', 'Webshop');
     if(IsUserLogIn()){
         Showmenuitem('changepassword', 'Verander wachtwoord');
         Showmenuitem('logout', 'Logout ', getLogInUsername());
@@ -183,8 +191,26 @@ function ShowContent($data){
         case 'changepassword':
             ShowPasswordContent($data);
             break;
+        case 'webshop':
+            require('webshop.php');
+            ShowWebshopContent();
+            break;
+        case 'webshopitem':
+            require('webshopitem.php');
+            ShowWebshopItemContent();
+            break;
     }
 }
+
+function ShowWebshopContent(){
+    $products = SearchForProducts();
+    ShowWebshop($products);
+};
+function ShowWebshopItemContent(){
+    $requested_item = GetUrlVar('row','');
+    $products = SearchForProducts();
+    ShowWebshopItem($products, $requested_item);
+};
 
 function ShowRegisterContent($data){
     if($data['registervalid'] == false){
