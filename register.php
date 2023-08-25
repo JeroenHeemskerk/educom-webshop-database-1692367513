@@ -30,11 +30,15 @@ function CheckRegister() {
                     $passwordErr = $passwordcheckErr = "wachtwoorden moeten hetzelfde zijn";
                 }
         if (empty($nameErr) && empty($emailErr) && empty($passwordErr) && empty($passwordcheckErr)) {
+            try {
                 if(DoesEmailExist($email) == false){
                     $registervalid = true;
                 }else {
                     $emailErr = "de email bestaat al";
                 }
+            } catch(Exception $e){
+                $data['genericErr'] = 'sorry er is een technische storing';
+            }
         }
     }
 

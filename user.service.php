@@ -12,12 +12,7 @@ function AuthorizeUser($email, $password){
     return $user;
 }
 function DoesEmailExist($email){
-    try{
     $user = FindUserByEmail($email);
-    }
-    catch(Exception $e){
-        $data['genericErr'] = 'sorry er is een technische storing';
-    }
     return !empty($user);
 }
 function StoreUser($email, $name, $password, $databaseErr){
