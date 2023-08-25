@@ -14,31 +14,40 @@ function ConnectDB(){
 
 function FindUserByEmail($email){
     $conn = ConnectDB();
-    $sql = "SELECT naam, email, wachtwoord FROM users WHERE email='$email'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_assoc($result)) {
-            return array("email" => $row["email"], "name" => $row["naam"], "password" => $row["wachtwoord"]);
+    try {
+        $sql = "SELECT naam, email, wachtwoord FROM users WHERE email='$email'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_assoc($result)) {
+                return array("email" => $row["email"], "name" => $row["naam"], "password" => $row["wachtwoord"]);
+            }
+        } else {
+            return null;
         }
-    } else {
-        return null;
-    }
+    } finally {
     mysqli_close($conn);
+    }
 }
 function SaveUser($email, $name, $password, $databaseErr){
     $conn = ConnectDB();
-    $sql = "INSERT INTO users (naam, email, wachtwoord)
-    VALUES ('$name', '$email', '$password')";
-    if (mysqli_query($conn, $sql) === FALSE) {
-        throw new Exception("Het is niet gelukt om het in het database te zetten");
-      }
+    try {
+        $sql = "INSERT INTO users (naam, email, wachtwoord)
+        VALUES ('$name', '$email', '$password')";
+        if (mysqli_query($conn, $sql) === FALSE) {
+            throw new Exception("Het is niet gelukt om het in het database te zetten");
+        }
+    } finally {    
     mysqli_close($conn);
+    }
 }
 function UpdateUser($password, $email){
     $conn = ConnectDB();
-    $sql = "UPDATE users SET wachtwoord='$password' WHERE email='$email'";
-    if (mysqli_query($conn, $sql) === FALSE) {
-        throw new Exception("Het is niet gelukt om het in het database te zetten");
-      }
+    try {
+        $sql = "UPDATE users SET wachtwoord='$password' WHERE email='$email'";
+        if (mysqli_query($conn, $sql) === FALSE) {
+            throw new Exception("Het is niet gelukt om het in het database te zetten");
+        }
+    } finally {    
     mysqli_close($conn);
+    }
 }

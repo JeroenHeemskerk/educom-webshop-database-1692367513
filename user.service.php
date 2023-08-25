@@ -1,5 +1,5 @@
 <?php
-include "users.repository.php";
+include_once "users.repository.php";
 include_once "sessions.php";
 function AuthorizeUser($email, $password){
     try{
