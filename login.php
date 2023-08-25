@@ -7,14 +7,18 @@ function CheckLogin() {
     $password = TestInput(getPostVar('password'));
     $loginvalid = false;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $user = AuthorizeUser($_POST['email'], $_POST['password']);
-            if($user == null){
-                $emailErr = "deze email is niet gevonden in het database";
-            }elseif($user == "error"){
-                $passwordErr = "wachtwoord hoort niet bij deze email";
-            }else{
-                $name = $user["name"];
-                $loginvalid = true;
+        try {
+            $user = AuthorizeUser($_POST['email'], $_POST['password']);
+                if($user == null){
+                    $emailErr = "deze email is niet gevonden in het database";
+                }elseif($user == "error"){
+                    $passwordErr = "wachtwoord hoort niet bij deze email";
+                }else{
+                    $name = $user["name"];
+                    $loginvalid = true;
+                }
+            } catch(Exception $e){
+                $data['genericErr'] = 'sorry er is een technische storing';
             }
         }
     return array ("loginvalid"=> $loginvalid, "email" => $email, "password" => $password, 
