@@ -1,5 +1,5 @@
 <?php
-function FindUserByEmail($email){
+function ConnectDB(){
     $servername = "localhost";
     $username = "stijn_webshop_educom";
     //super goed wachtwoord ik weet
@@ -9,6 +9,11 @@ function FindUserByEmail($email){
     if (!$conn) {
         throw new Exception("Er is geen verbinden gevonden met het database");
     }
+    return $conn;
+}
+
+function FindUserByEmail($email){
+    $conn = ConnectDB();
     $sql = "SELECT naam, email, wachtwoord FROM users WHERE email='$email'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
@@ -21,15 +26,7 @@ function FindUserByEmail($email){
     mysqli_close($conn);
 }
 function FindPassword($password){
-    $servername = "localhost";
-    $username = "stijn_webshop_educom";
-    //super goed wachtwoord ik weet
-    $sqlpassword = "Stijnstijn12";
-    $dbname = "stijn_webshop";
-    $conn = mysqli_connect($servername, $username, $sqlpassword, $dbname);
-    if (!$conn) {
-        throw new Exception("Er is geen verbinden gevonden met het database");
-    }
+    $conn = ConnectDB();
     $sql = "SELECT naam, email, wachtwoord FROM users WHERE wachtwoord='$password'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
@@ -40,15 +37,7 @@ function FindPassword($password){
     mysqli_close($conn);
 }
 function SaveUser($email, $name, $password, $databaseErr){
-    $servername = "localhost";
-    $username = "stijn_webshop_educom";
-    //super goed wachtwoord ik weet
-    $sqlpassword = "Stijnstijn12";
-    $dbname = "stijn_webshop";
-    $conn = mysqli_connect($servername, $username, $sqlpassword, $dbname);
-    if (!$conn) {
-        throw new Exception("Er is geen verbinden gevonden met het database");
-    }
+    $conn = ConnectDB();
     $sql = "INSERT INTO users (naam, email, wachtwoord)
     VALUES ('$name', '$email', '$password')";
     if (mysqli_query($conn, $sql) === FALSE) {
@@ -57,15 +46,7 @@ function SaveUser($email, $name, $password, $databaseErr){
     mysqli_close($conn);
 }
 function UpdateUser($password, $email){
-    $servername = "localhost";
-    $username = "stijn_webshop_educom";
-    //super goed wachtwoord ik weet
-    $sqlpassword = "Stijnstijn12";
-    $dbname = "stijn_webshop";
-    $conn = mysqli_connect($servername, $username, $sqlpassword, $dbname);
-    if (!$conn) {
-        throw new Exception("Er is geen verbinden gevonden met het database");
-      } 
+    $conn = ConnectDB();
     $sql = "UPDATE users SET wachtwoord='$password' WHERE email='$email'";
     if (mysqli_query($conn, $sql) === FALSE) {
         throw new Exception("Het is niet gelukt om het in het database te zetten");
