@@ -8,14 +8,21 @@ function CheckLogin() {
     $loginvalid = false;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
-            $user = AuthorizeUser($_POST['email'], $_POST['password']);
-                if($user == null){
+            $userInfo = AuthorizeUser($email, $password);
+            switch($userInfo['result']) {
+                case RESULT_UNKNOWN_USER:
                     $emailErr = "deze email is niet gevonden in het database";
-                }elseif($user == "error"){
+                    break;
+                case RESULT_WRONG_PASSWORD:
                     $passwordErr = "wachtwoord hoort niet bij deze email";
-                }else{
-                    $name = $user["name"];
+                    break;
+                case RESULT_OK:
+                    $name = $userInfo["user"]["name"];
                     $loginvalid = true;
+                    break;
+                default: 
+                   logDebug("Onbekend result " . $userInfo['result']);
+                   break;
                 }
             } catch(Exception $e){
                 $data['genericErr'] = 'sorry er is een technische storing';

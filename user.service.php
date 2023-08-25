@@ -1,15 +1,18 @@
 <?php
 include_once "users.repository.php";
 include_once "sessions.php";
+define("RESULT_OK", 0);
+define("RESULT_UNKNOWN_USER", -1);
+define("RESULT_WRONG_PASSWORD", -2);
 function AuthorizeUser($email, $password){
     $user = FindUserByEmail($email);
     if(empty($user)){
-        return null;
+        return ['result' => RESULT_UNKNOWN_USER]; 
     }
     if($password != $user['password']){
-        return "error";
+        return ['result' => RESULT_WRONG_PASSWORD]; 
     }
-    return $user;
+    return ['result' => RESULT_OK, 'user' => $user]; 
 }
 function DoesEmailExist($email){
     $user = FindUserByEmail($email);
