@@ -8,7 +8,7 @@ function CheckLogin() {
     $loginvalid = false;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
-            $userInfo = AuthorizeUser($email, $password);
+            $userInfo = AuthorizeUserByEmail($email, $password);
             switch($userInfo['result']) {
                 case RESULT_UNKNOWN_USER:
                     $emailErr = "deze email is niet gevonden in het database";
@@ -18,6 +18,7 @@ function CheckLogin() {
                     break;
                 case RESULT_OK:
                     $name = $userInfo["user"]["name"];
+                    $userId = $userInfo["user"]["id"];
                     $loginvalid = true;
                     break;
                 default: 
@@ -25,11 +26,11 @@ function CheckLogin() {
                    break;
                 }
             } catch(Exception $e){
-                $data['genericErr'] = 'sorry er is een technische storing';
+                $data['genericErr'] = 'sorry er is een technische storing3';
             }
         }
     return array ("loginvalid"=> $loginvalid, "email" => $email, "password" => $password, 
-    "emailErr" => $emailErr, "passwordErr" => $passwordErr, "genericErr" => $genericErr, "name" => $name);
+    "emailErr" => $emailErr, "passwordErr" => $passwordErr, "genericErr" => $genericErr, "name" => $name, "userId" => $userId);
 }
 
 function ShowLoginForm($data) { echo '

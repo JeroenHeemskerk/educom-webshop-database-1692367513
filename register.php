@@ -37,7 +37,7 @@ function CheckRegister() {
                     $emailErr = "de email bestaat al";
                 }
             } catch(Exception $e){
-                $data['genericErr'] = 'sorry er is een technische storing';
+                $data['genericErr'] = 'sorry er is een technische storing4';
             }
         }
     }

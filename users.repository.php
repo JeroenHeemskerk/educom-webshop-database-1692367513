@@ -16,15 +16,26 @@ function FindUserByEmail($email){
     $conn = ConnectDB();
     try {
         $email = $conn->real_escape_string($email);
-        $sql = "SELECT naam, email, wachtwoord FROM users WHERE email='$email'";
+        $sql = "SELECT * FROM users WHERE email='$email'";
         $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                return array("email" => $row["email"], "name" => $row["naam"], "password" => $row["wachtwoord"]);
-            }
-        } else {
-            return null;
+        if (!$result) {
+            throw new Exception("Finding User failed, SQL: " . $sql . ", Error " . $conn->error());
         }
+        return $result->fetch_assoc();
+    } finally {
+    mysqli_close($conn);
+    }
+}
+function FindUserByUserId($userId){
+    $conn = ConnectDB();
+    try {
+        $userId = $conn->real_escape_string($userId);
+        $sql = "SELECT * FROM users WHERE id='$userId'";
+        $result = mysqli_query($conn, $sql);
+        if (!$result) {
+            throw new Exception("Finding User failed, SQL: " . $sql . ", Error " . $conn->error());
+        }
+        return $result->fetch_assoc();
     } finally {
     mysqli_close($conn);
     }
@@ -35,8 +46,8 @@ function SaveUser($email, $name, $password, $databaseErr){
         $name = $conn->real_escape_string($name);
         $email = $conn->real_escape_string($email);
         $password = $conn->real_escape_string($password);
-        $sql = "INSERT INTO users (naam, email, wachtwoord)
-        VALUES ('$name', '$email', '$password')";
+        $sql = "INSERT INTO users (name, email, password)
+        VALUES ('$name','$email','$password')";
         if (mysqli_query($conn, $sql) === FALSE) {
             throw new Exception("Het is niet gelukt om het in het database te zetten");
         }
@@ -44,12 +55,12 @@ function SaveUser($email, $name, $password, $databaseErr){
     mysqli_close($conn);
     }
 }
-function UpdateUser($password, $email){
+function UpdateUser($userId, $password){
     $conn = ConnectDB();
     try {
         $password = $conn->real_escape_string($password);
-        $email = $conn->real_escape_string($email);
-        $sql = "UPDATE users SET wachtwoord='$password' WHERE email='$email'";
+        $userId = $conn->real_escape_string($userId);
+        $sql = "UPDATE users SET password='$password' WHERE id='$userId'";
         if (mysqli_query($conn, $sql) === FALSE) {
             throw new Exception("Het is niet gelukt om het in het database te zetten");
         }

@@ -19,7 +19,7 @@ function ChangePassword() {
             $oldpasswordErr = "wachtwoord is verplicht";
         } else {
             try{
-            $user = AuthorizeUser(getLogInEmail() ,$oldpassword);
+            $user = AuthorizeUserByUserId(getLogInUserId(), $oldpassword);
             }
             catch(Exception $e){
                 $genericErr = 'sorry er is een technische storing';

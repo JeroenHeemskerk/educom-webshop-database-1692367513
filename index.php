@@ -20,8 +20,8 @@ function ProcessRequest($page){
                 $data['loginvalid'] = "";
                 }
                 catch(Exception $e){
-                    $data['genericErr'] = 'sorry er is een technische storing';
-                    #ShowLog("Store Userfailed, " . $e->getMessage());
+                    $data['genericErr'] = 'sorry er is een technische storing1';
+                    echo ("Store Userfailed, " . $e->getMessage());
                 }
             }
             break;
@@ -44,12 +44,42 @@ function ProcessRequest($page){
                 $page = 'home';
                 }
                 catch(Exception $e){
-                    $data['genericErr'] = 'sorry er is een technische storing';
+                    $data['genericErr'] = 'sorry er is een technische storing2';
                 }
+            }
+            break;
+        case "webshop":
+            // Optioneel kan je onderstaande code ook in een functie zetten $data = GetWebshopData();
+            try {
+                 $data['products'] = SearchForProducts();
+            } 
+            catch (Exception $e) {
+                 $data['genericErr'] = "Kan de producten niet ophalen, probeer het later nogmaals";
+                 LogDebug("Error collecting products: " . $e -> getMessage());
+            }
+            break;
+
+        case "webshopitem":
+            // Optioneel kan je onderstaande code ook in een functie zetten $data = GetWebshopItemData();
+            try {
+                $row = GetUrlVar("Row"); // de default is al "". Ik zou deze variabele "id" of "productId" noemen
+                $data['product'] = SearchForProductById($row); // Maak een functie die de data voor 1 product of NULL teruggeeft
+            } 
+            catch (Exception $e) {
+                 $data['genericErr'] = "Kan dit product niet ophalen, probeer het later nogmaals";
+                 LogDebug("Error collecting product with id " . $row . ": " . $e -> getMessage());
             }
             break;
     }
     $data['page'] = $page;
+    $data['menu'] = array('home' => 'Home', 'about' => 'About', 'contact' => 'Contact', 'webshop' => 'Webshop');
+    if (isUserLogIn()) {
+        $data['menu']['changepassword'] = "verander wachtwoord"; 
+        $data['menu']['logout'] = "Logout " . getLogInUsername(); 
+    } else {
+        $data['menu']['register'] = "Register";
+        $data['menu']['login'] = "Login";
+    }
     return $data;
 }
 
@@ -97,7 +127,7 @@ function ShowHeadSection(){
 function ShowBodySection($data) { 
    echo '    <body>' . PHP_EOL; 
    ShowHeader($data);
-   ShowMenu(); 
+   ShowMenu($data); 
    ShowGenericErr($data);
    ShowContent($data); 
    ShowFooter(); 
@@ -140,19 +170,9 @@ function ShowHeader($data){
     }
 }
 
-function ShowMenu(){
+function ShowMenu($data){
     echo '<ul class="menu">';
-    Showmenuitem('home', 'Home');
-    Showmenuitem('about', 'About');
-    Showmenuitem('contact', 'Contact');
-    Showmenuitem('webshop', 'Webshop');
-    if(IsUserLogIn()){
-        Showmenuitem('changepassword', 'Verander wachtwoord');
-        Showmenuitem('logout', 'Logout ', getLogInUsername());
-    }else{
-        Showmenuitem('register', 'Registeer');
-        Showmenuitem('login', 'Login');
-    }
+    foreach($data['menu'] as $link => $label) { showMenuItem($link,$label); }
     echo '</ul>';
 }
 
