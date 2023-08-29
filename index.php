@@ -49,7 +49,6 @@ function ProcessRequest($page){
             }
             break;
         case "webshop":
-            // Optioneel kan je onderstaande code ook in een functie zetten $data = GetWebshopData();
             try {
                  $data['products'] = SearchForProducts();
             } 
@@ -60,10 +59,9 @@ function ProcessRequest($page){
             break;
 
         case "webshopitem":
-            // Optioneel kan je onderstaande code ook in een functie zetten $data = GetWebshopItemData();
             try {
-                $row = GetUrlVar("Row"); // de default is al "". Ik zou deze variabele "id" of "productId" noemen
-                $data['product'] = SearchForProductById($row); // Maak een functie die de data voor 1 product of NULL teruggeeft
+                $productId = GetUrlVar("row"); // de default is al "". Ik zou deze variabele "id" of "productId" noemen
+                $data['product'] = SearchForProductById($productId); // Maak een functie die de data voor 1 product of NULL teruggeeft
             } 
             catch (Exception $e) {
                  $data['genericErr'] = "Kan dit product niet ophalen, probeer het later nogmaals";
@@ -213,23 +211,20 @@ function ShowContent($data){
             break;
         case 'webshop':
             require('webshop.php');
-            ShowWebshopContent();
+            ShowWebshopContent($data);
             break;
         case 'webshopitem':
             require('webshopitem.php');
-            ShowWebshopItemContent();
+            ShowWebshopItemContent($data);
             break;
     }
 }
 
-function ShowWebshopContent(){
-    $products = SearchForProducts();
-    ShowWebshop($products);
+function ShowWebshopContent($data){
+    ShowWebshop($data['products']);
 };
-function ShowWebshopItemContent(){
-    $requested_item = GetUrlVar('row','');
-    $products = SearchForProducts();
-    ShowWebshopItem($products, $requested_item);
+function ShowWebshopItemContent($data){
+    ShowWebshopItem($data['product']);
 };
 
 function ShowRegisterContent($data){
