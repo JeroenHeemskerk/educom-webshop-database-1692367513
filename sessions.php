@@ -21,3 +21,19 @@ function getLogInUsername() {
 function getLogInUserId() {
     return $_SESSION['userId'];
 }
+function AddProductToCart($ProductId) {
+    if(array_key_exists($ProductId, getCart())){
+        $_SESSION['cart'][$ProductId] += 1;
+    } else {
+        $_SESSION['cart'][$ProductId] = 1;
+    }
+}
+function RemoveProductFromCart($ProductId) {
+    $_SESSION['cart'][$ProductId] -= 1;
+}
+function getCart(){
+    if(!isset($_SESSION['cart'])){
+        $_SESSION['cart'] = array();
+    }
+    return $_SESSION['cart'];
+}

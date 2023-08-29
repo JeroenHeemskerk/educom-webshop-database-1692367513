@@ -2,6 +2,7 @@
 include_once "user.service.php";
 function CheckLogin() {
     $emailErr = $passwordErr = $genericErr  = "";
+    $userId = "";
     $name = TestInput(getPostVar('name'));
     $email = TestInput(getPostVar('email'));
     $password = TestInput(getPostVar('password'));

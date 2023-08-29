@@ -56,12 +56,31 @@ function ProcessRequest($page){
                  $data['genericErr'] = "Kan de producten niet ophalen, probeer het later nogmaals";
                  LogDebug("Error collecting products: " . $e -> getMessage());
             }
+            $action = GetPostVar("action");
+                switch($action){
+                    case "AddProductToCart":
+                        $productId = GetPostVar("productid");
+                        AddProductToCart($productId);
+                        break;
+                }
             break;
-
+        case "shoppingcart":
+            $action = GetPostVar("action");
+                switch($action){
+                    case "AddProductToCart":
+                        $productId = GetPostVar("productid");
+                        AddProductToCart($productId);
+                        break;
+                    case "RemoveProductFromCart":
+                        $productId = GetPostVar("productid");
+                        RemoveProductFromCart($productId);
+                        break;
+                }
+            break;
         case "webshopitem":
             try {
-                $productId = GetUrlVar("row"); // de default is al "". Ik zou deze variabele "id" of "productId" noemen
-                $data['product'] = SearchForProductById($productId); // Maak een functie die de data voor 1 product of NULL teruggeeft
+                $productId = GetUrlVar("row"); 
+                $data['product'] = SearchForProductById($productId); 
             } 
             catch (Exception $e) {
                  $data['genericErr'] = "Kan dit product niet ophalen, probeer het later nogmaals";
@@ -72,7 +91,8 @@ function ProcessRequest($page){
     $data['page'] = $page;
     $data['menu'] = array('home' => 'Home', 'about' => 'About', 'contact' => 'Contact', 'webshop' => 'Webshop');
     if (isUserLogIn()) {
-        $data['menu']['changepassword'] = "verander wachtwoord"; 
+        $data['menu']['changepassword'] = "Verander wachtwoord"; 
+        $data['menu']['shoppingcart'] = "Shoppingcart"; 
         $data['menu']['logout'] = "Logout " . getLogInUsername(); 
     } else {
         $data['menu']['register'] = "Register";
@@ -160,10 +180,13 @@ function ShowHeader($data){
             Echo '<h1>Verander wachtwoord</h1>';
             break;
         case 'webshop':
-            Echo '<h1>webshop</h1>';
+            Echo '<h1>Webshop</h1>';
             break;
         case 'webshopitem':
-            Echo '<h1>details</h1>';
+            Echo '<h1>Details</h1>';
+            break;
+        case 'shoppingcart':
+            Echo '<h1>Shopingcart</h1>';
             break;
     }
 }
@@ -217,6 +240,10 @@ function ShowContent($data){
             require('webshopitem.php');
             ShowWebshopItemContent($data);
             break;
+        case 'shoppingcart':
+            require('shoppingcart.php');
+            ShowShoppingCartContent();
+            break;
     }
 }
 
@@ -225,6 +252,9 @@ function ShowWebshopContent($data){
 };
 function ShowWebshopItemContent($data){
     ShowWebshopItem($data['product']);
+};
+function ShowShoppingCartContent(){
+    ShowShoppingCart();
 };
 
 function ShowRegisterContent($data){
