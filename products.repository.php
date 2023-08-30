@@ -40,3 +40,18 @@ function GetProductById($productId){
     mysqli_close($conn);
     }
 }
+
+function SaveOrder($userId, $productId){
+    $conn = ConnectDB();
+    //var_dump($productId);
+    try {
+        $userId = $conn->real_escape_string($userId);
+        $productId = $conn->real_escape_string($productId);
+        $sql = "INSERT INTO shoppingcart (userid, productid) VALUES ('$userId','$productId')";
+        if (mysqli_query($conn, $sql) === FALSE) {
+            throw new Exception("Het is niet gelukt om het in het database te zetten");
+        }
+    } finally {    
+    mysqli_close($conn);
+    }
+}

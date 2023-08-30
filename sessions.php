@@ -31,6 +31,9 @@ function AddProductToCart($ProductId) {
 function RemoveProductFromCart($ProductId) {
     $_SESSION['cart'][$ProductId] -= 1;
 }
+function CleanCart() {
+    unset($_SESSION["cart"]);
+}
 function getCart(){
     if(!isset($_SESSION['cart'])){
         $_SESSION['cart'] = array();

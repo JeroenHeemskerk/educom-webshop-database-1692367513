@@ -1,9 +1,6 @@
 <?php
 include_once 'sessions.php';
 include_once "product.service.php";
-include 'login.php';
-include 'register.php';
-include 'changepassword.php';
 $page = GetRequestedPage();
 $data = ProcessRequest($page);
 ShowResponsePage($data);
@@ -12,6 +9,7 @@ function ProcessRequest($page){
     $data['genericErr'] = "";
     switch ($page){
         case 'register':
+            include_once 'register.php';
             $data = CheckRegister();
             if($data['registervalid']){
                 try{
@@ -26,6 +24,7 @@ function ProcessRequest($page){
             }
             break;
         case 'login':
+            include_once 'login.php';
             $data = CheckLogin();
             if($data['loginvalid']){
                 LoginUser($data);
@@ -37,6 +36,7 @@ function ProcessRequest($page){
             $page = 'home';
             break;
         case 'changepassword':
+            include_once 'changepassword.php';
             $data = ChangePassword();
             if($data['passwordvalid']){
                 try{
@@ -59,8 +59,9 @@ function ProcessRequest($page){
             $action = GetPostVar("action");
                 switch($action){
                     case "AddProductToCart":
-                        $productId = GetPostVar("productid");
-                        AddProductToCart($productId);
+                        $productsId = GetPostVar("productsid");
+                        var_dump($productsId);
+                        AddProductToCart($productsId);
                         break;
                 }
             break;
@@ -74,6 +75,10 @@ function ProcessRequest($page){
                     case "RemoveProductFromCart":
                         $productId = GetPostVar("productid");
                         RemoveProductFromCart($productId);
+                        break;
+                    case "AddProductToDatabase":
+                        $productsId = GetPostVar("data");
+                        AddProductToDatabase($productsId);
                         break;
                 }
             break;
@@ -224,12 +229,15 @@ function ShowContent($data){
             ShowContactContent();
             break;
         case 'register':
+            include_once 'register.php';
             ShowRegisterContent($data);
             break;
         case 'login':
+            include_once 'login.php';
             ShowLoginContent($data);
             break;
         case 'changepassword':
+            include_once 'changepassword.php';
             ShowPasswordContent($data);
             break;
         case 'webshop':
