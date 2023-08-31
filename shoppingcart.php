@@ -3,9 +3,9 @@ include_once 'sessions.php';
 function ShowShoppingCart(){
     $cart = getCart();
     $totaal = 0;
-    $cartkeys = array_keys($cart);
-    foreach ($cartkeys as $key) {
-        $product = GetProductById($key);
+    $products = GetAllProducts();
+    foreach ($cart as $key => $quantity) {
+        $product = $products[$key];
         ShoppingCartForm("shoppingcart", "RemoveProductFromCart", "haal er 1 van uw winkelwagen weg", $product["id"]);
         ShoppingCartForm("shoppingcart", "AddProductToCart", "voeg nog 1 toe aan uw winkelwagen", $product["id"]);
         echo '
