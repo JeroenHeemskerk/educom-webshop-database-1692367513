@@ -56,30 +56,10 @@ function ProcessRequest($page){
                  $data['genericErr'] = "Kan de producten niet ophalen, probeer het later nogmaals";
                  LogDebug("Error collecting products: " . $e -> getMessage());
             }
-            $action = GetPostVar("action");
-                switch($action){
-                    case "AddProductToCart":
-                        $productId = GetPostVar("productid");
-                        AddProductToCart($productId);
-                        break;
-                }
+            handleActions();
             break;
         case "shoppingcart":
-            $action = GetPostVar("action");
-                switch($action){
-                    case "AddProductToCart":
-                        $productId = GetPostVar("productid");
-                        AddProductToCart($productId);
-                        break;
-                    case "RemoveProductFromCart":
-                        $productId = GetPostVar("productid");
-                        RemoveProductFromCart($productId);
-                        break;
-                    case "AddProductToDatabase":
-                        //$productsId = GetPostVar("data");
-                        AddProductToDatabase(/*productsId*/);
-                        break;
-                }
+            handleActions();
             break;
         case "webshopitem":
             try {
@@ -103,6 +83,23 @@ function ProcessRequest($page){
         $data['menu']['login'] = "Login";
     }
     return $data;
+}
+
+function handleActions(){
+    $action = GetPostVar("action");
+            switch($action){
+                case "AddProductToCart":
+                    $productId = GetPostVar("productid");
+                    AddProductToCart($productId);
+                    break;
+                case "RemoveProductFromCart":
+                    $productId = GetPostVar("productid");
+                    RemoveProductFromCart($productId);
+                    break;
+                case "AddProductToDatabase":
+                    AddProductToDatabase();
+                    break;
+            }
 }
 
 function GetRequestedPage(){
