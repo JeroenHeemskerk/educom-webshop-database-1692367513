@@ -5,6 +5,9 @@ function GetAllProducts(){
     try {
         $sql = "SELECT * FROM products";
         $result = mysqli_query($conn, $sql);
+        if (!$result) {
+            throw new Exception("geen producten gevonden, SQL: " . $sql . ", Error " . $conn->error());
+        }
         $products = array();
         while($row = mysqli_fetch_assoc($result)) {
             $products[$row["id"]] = $row;
@@ -21,6 +24,9 @@ function GetProductById($productId){
         $productId = $conn->real_escape_string($productId);
         $sql = "SELECT * FROM products WHERE id ='$productId'";
         $result = mysqli_query($conn, $sql);
+        if (!$result) {
+            throw new Exception("geen product gevonden, SQL: " . $sql . ", Error " . $conn->error());
+        }
         $product = "";
         while($row = mysqli_fetch_assoc($result)) {
             $product = array("id" => $row["id"], "name" => $row["name"], "description" => $row["description"], 
