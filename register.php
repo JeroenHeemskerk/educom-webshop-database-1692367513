@@ -51,37 +51,24 @@ function ShowRegisterForm($data) { echo '
     <form action="index.php" method="post" name="register">
         <div>
             <input type="hidden" name="page" value="register">
-        </div>
-        <div>
-            <label class="form" for="name">naam:</label>
-            <input class="input" type="text" id="name" name="name" 
-                value="'.(!empty($data["name"]) ? $data["name"] : '') .'">';
-            echo '<span class="error">' . $data['nameErr'] . '</span>';
-            echo '
-        </div>
-        <div>
-            <label class="form" for="email">email:</label>
-            <input class="input" type="text" id="email" name="email" 
-                value="'.(!empty($data["email"]) ? $data["email"] : '') .'">';
-            echo '<span class="error">' . $data['emailErr'] . '</span>';
-            echo '
-        </div>
-        <div>
-            <label class="form" for="password">wachtwoord:</label>
-            <input class="input" type="text" id="password" name="password" 
-                value="'.(!empty($data["password"]) ? $data["password"] : '') .'">';
-            echo '<span class="error">' . $data['passwordErr'] . '</span>';
-            echo '
-        </div>
-        <div>
-            <label class="form" for="passwordcheck">herhaal wachtwoord:</label>
-            <input class="input" type="text" id="passwordcheck" name="passwordcheck" 
-                value="'.(!empty($data["passwordcheck"]) ? $data["passwordcheck"] : '') .'">';
-            echo '<span class="error">' . $data['passwordcheckErr'] . '</span>';
-            echo '
-        </div>
+        </div>';
+        ShowFormField("name", "Naam:", $data["name"], $data['nameErr']);
+        ShowFormField("email", "Email:", $data["email"], $data['emailErr']);
+        ShowFormField("password", "Wachtwoord:", $data["password"], $data['passwordErr']);
+        ShowFormField("passwordcheck", "Herhaal wachtwoord:", $data["passwordcheck"], $data['passwordcheckErr']);
+        echo '
         <div>
             <input type="submit" value="verstuur">
             '. $data['databaseErr'] . '
         </div>
 ';}
+
+function ShowFormField($for, $label, $value, $error){echo '
+    <div>
+        <label class="form" for=' . $for . '>' . $label . '</label>
+        <input class="input" type="text" id=' . $for . ' name=' . $for . ' 
+        value="'.(!empty($value) ? $value : '') .'">';
+        echo '<span class="error">' . $error . '</span>';
+        echo '
+    </div>';
+}

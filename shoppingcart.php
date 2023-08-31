@@ -11,9 +11,11 @@ function ShowShoppingCart(){
         <p>prijs: ';echo $cartLine["price"]; echo ' euro</p>
         <p>beschrijving: ';echo $cartLine["description"]; echo '</p>
         <a href="index.php?page=webshopitem&row=';echo $cartLine["id"]; echo'"><img src="';echo $cartLine["filename"]; echo '" width="10%" height="10%"></a></p>';
+    }
+    echo '<p>Eindbedrag: '; echo $data['total']; echo' euro</p>';
+    if(!empty($data['cartLines'])){
         ShoppingCartForm("shoppingcart", "AddProductToDatabase", "afrekenen");
     }
-    echo '<p>eindbedrag: '; echo $data['total']; echo' euro</p>';
 }
 
 function ShoppingCartForm($page, $action, $text, $productid=''){echo'

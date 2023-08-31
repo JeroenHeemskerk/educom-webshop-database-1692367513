@@ -1,6 +1,7 @@
 <?php
 include_once 'sessions.php';
 include_once "product.service.php";
+include_once "cart.service.php";
 $page = GetRequestedPage();
 $data = ProcessRequest($page);
 ShowResponsePage($data);
@@ -71,9 +72,18 @@ function ProcessRequest($page){
                  LogDebug("Error collecting product with id " . $row . ": " . $e -> getMessage());
             }
             break;
+        case "top5":
+            try {
+                $data['carts'] = SearchForTop5Products();
+            } 
+            catch (Exception $e) {
+                $data['genericErr'] = "Kan de top 5 producten niet ophalen, probeer het later nogmaals";
+                echo("Error collecting carts: " . $e -> getMessage());
+            }
+            break;
     }
     $data['page'] = $page;
-    $data['menu'] = array('home' => 'Home', 'about' => 'About', 'contact' => 'Contact', 'webshop' => 'Webshop');
+    $data['menu'] = array('home' => 'Home', 'about' => 'About', 'contact' => 'Contact', 'webshop' => 'Webshop', 'top5' => "Top 5");
     if (isUserLogIn()) {
         $data['menu']['changepassword'] = "Verander wachtwoord"; 
         $data['menu']['shoppingcart'] = "Shoppingcart"; 
@@ -139,7 +149,7 @@ function BeginDocument(){
 function ShowHeadSection(){
     echo '<head>
     <link rel="stylesheet" href="CSS/stylesheet.css">
-    <title>About</title>
+    <title>Stijn\'s webshop</title>
     </head>';
 }
 
@@ -188,6 +198,9 @@ function ShowHeader($data){
             break;
         case 'shoppingcart':
             Echo '<h1>Shopingcart</h1>';
+            break;
+        case 'top5':
+            Echo '<h1>Top 5</h1>';
             break;
     }
 }
@@ -248,12 +261,19 @@ function ShowContent($data){
             require('shoppingcart.php');
             ShowShoppingCartContent();
             break;
+        case 'top5':
+            require('top5.php');
+            ShowTop5Content($data);
+            break;
     }
 }
 
 function ShowWebshopContent($data){
     ShowWebshop($data['products']);
 };
+function ShowTop5Content($data){
+    ShowTop5($data['carts']);
+}
 function ShowWebshopItemContent($data){
     ShowWebshopItem($data['product']);
 };

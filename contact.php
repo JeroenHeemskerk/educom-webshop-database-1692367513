@@ -46,7 +46,7 @@ function ValidateContact() {
         if (empty($feedback)) {
             $feedbackErr = "feedback is verplicht";
         }
-        if (!empty($firstname) && !empty($lastname) && !empty($email) && !empty($phone) && !empty($compref) && !empty($feedback)) {
+        if (empty($prefErr) && empty($firstnameErr) && empty($lastnameErr) && empty($emailErr) && empty($phoneErr) && empty($comprefErr) && empty($feedbackErr)) {
             $valid = true;
         }
     }
@@ -71,35 +71,12 @@ function ValidateContact() {
                 </select>';
                 echo '<span class="error">' . $data['prefErr'] . '</span>';
                 echo '
-            </div>
-            <div>
-                <label class="form" for="Firstname">Voornaam:</label>
-                <input class="input" type="text" id="Firstname" name="Firstname" 
-                    value="'.($data["firstname"]) .'">';
-                echo '<span class="error">' . $data['firstnameErr'] . '</span>';
-                echo '
-            </div>
-            <div>
-                <label class="form" for="Lastname">Achternaam:</label>
-                <input class="input" type="text" id="Lastname" name="Lastname" 
-                    value="'.($data["lastname"]) .'">';
-                echo '<span class="error">' . $data['lastnameErr'] . '</span>';
-                echo '
-            </div>
-            <div>
-                <label class="form" for="Email">Email:</label>
-                <input class="input" type="email" id="Email" name="Email" 
-                    value="' .($data["email"]) .' ">';
-                echo '<span class="error">' . $data['emailErr'] . '</span>';
-                echo '
-            </div>
-            <div>
-                <label class="form" for="PhoneNum">Telefoonnummer:</label>
-                <input class="input" type="tel" id="PhoneNum" name="PhoneNum"
-                    value="'.($data["phone"]) .'">';
-                echo '<span class="error">' . $data['phoneErr'] . '</span>';
-                echo '
-            </div>
+            </div>';
+            ShowContactFormField("Firstname","Voornaam:",$data["firstname"],$data['firstnameErr']);
+            ShowContactFormField("Lastname","Achternaam:",$data["lastname"],$data['lastnameErr']);
+            ShowContactFormField("Email","Email:",$data["email"],$data['emailErr']);
+            ShowContactFormField("PhoneNum","Telefoonnummer:",$data["phone"],$data['phoneErr']);
+            echo '
             <div>
                 <label class="form" for="ComPref">Op welke manier wilt u bereikt worden?</label>
                 <input type="radio" id="mail" name="ComPref" value="Email"';
@@ -145,3 +122,13 @@ function ValidateContact() {
         <a>Uw feedback: </a>';
         echo $data["feedback"]; echo '<br>
     ';}
+
+function ShowContactFormField($for, $label, $var, $Error){echo '
+    <div>
+        <label class="form" for=' . $for . '>' . $label . '</label>
+        <input class="input" type="text" id=' . $for . ' name=' . $for. ' 
+        value="' . $var . '">';
+        echo '<span class="error">' . $Error . '</span>';
+        echo '
+    </div>';
+}
