@@ -1,26 +1,19 @@
 <?php
 include_once 'sessions.php';
 function ShowShoppingCart(){
-    $cart = getCart();
-    $totaal = 0;
-    $products = GetAllProducts();
-    foreach ($cart as $key => $quantity) {
-        $product = $products[$key];
-        ShoppingCartForm("shoppingcart", "RemoveProductFromCart", "haal er 1 van uw winkelwagen weg", $product["id"]);
-        ShoppingCartForm("shoppingcart", "AddProductToCart", "voeg nog 1 toe aan uw winkelwagen", $product["id"]);
+    $data = GetShoppingCartData();
+    foreach($data['cartLines'] as $cartLine) {
+        ShoppingCartForm("shoppingcart", "RemoveProductFromCart", "haal er 1 van uw winkelwagen weg", $cartLine["id"]);
+        ShoppingCartForm("shoppingcart", "AddProductToCart", "voeg nog 1 toe aan uw winkelwagen", $cartLine["id"]);
         echo '
-        <p>totaal: ';echo $cart[$key]; echo '</p>
-        <p>naam: ';echo $product["name"]; echo '</p>
-        <p>prijs: ';echo $product["price"]; echo ' euro</p>
-        <p>beschrijving: ';echo $product["description"]; echo '</p>
-        <a href="index.php?page=webshopitem&row=';echo $product["id"]; echo'"><img src="';echo $product["filename"]; echo '" width="10%" height="10%"></a></p>';
-        $totaal += $product["price"] * $cart[$key];
-        for ($i = 1; $i <= $cart[$key]; $i++) {
-            $productsid[] = $product["id"];
-        }
+        <p>totaal: ';echo $cartLine["quantity"]; echo '</p>
+        <p>naam: ';echo $cartLine["name"]; echo '</p>
+        <p>prijs: ';echo $cartLine["price"]; echo ' euro</p>
+        <p>beschrijving: ';echo $cartLine["description"]; echo '</p>
+        <a href="index.php?page=webshopitem&row=';echo $cartLine["id"]; echo'"><img src="';echo $cartLine["filename"]; echo '" width="10%" height="10%"></a></p>';
+        ShoppingCartForm("shoppingcart", "AddProductToDatabase", "afrekenen");
     }
-    echo '<p>eindbedrag: '; echo $totaal; echo' euro</p>';
-    if(!empty($cartkeys)){ShoppingCartForm("shoppingcart", "AddProductToDatabase", "afrekenen",);}
+    echo '<p>eindbedrag: '; echo $data['total']; echo' euro</p>';
 }
 
 function ShoppingCartForm($page, $action, $text, $productid=''){echo'
@@ -30,4 +23,17 @@ function ShoppingCartForm($page, $action, $text, $productid=''){echo'
         <input type="hidden" name="action" value="';echo $action ;echo'">
         <input type="submit" value="';echo $text ;echo'">
     </form>';
+}
+
+function GetShoppingCartData(){ 
+    $cart = getCart(); 
+    $total = 0;
+    $cartLines = array(); 
+    foreach ($cart as $key => $quantity) { 
+        $product = GetProductById($key); 
+        $cartLine = array("id" => $product["id"], "name" => $product["name"], "quantity" => $quantity, "price" => $product["price"], "description" => $product["description"], "filename" => $product["filename"], 'subTotal' => ($quantity * $product['price']));
+        $cartLines[] = $cartLine;
+        $total += $cartLine['subTotal'];
+    }
+    return array("cartLines" => $cartLines, "total" => $total);
 }
