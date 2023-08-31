@@ -6,5 +6,5 @@ function ShowWebshopItem($product){echo '
     <p>prijs: ';echo $product["price"]; echo ' euro</p>
     <p>beschrijving: ';echo $product["description"]; echo '</p>
     <img src="';echo $product["filename"]; echo '" width="100%" height="100%"></img>';
-    ShoppingCartForm("webshop", $product["id"], "AddProductToCart", "bestel");
+    ShoppingCartForm("webshop", "AddProductToCart", "bestel", $product["id"]);
 }
