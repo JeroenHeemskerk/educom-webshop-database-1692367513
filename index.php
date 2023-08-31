@@ -59,9 +59,8 @@ function ProcessRequest($page){
             $action = GetPostVar("action");
                 switch($action){
                     case "AddProductToCart":
-                        $productsId = GetPostVar("productsid");
-                        var_dump($productsId);
-                        AddProductToCart($productsId);
+                        $productId = GetPostVar("productid");
+                        AddProductToCart($productId);
                         break;
                 }
             break;
@@ -77,8 +76,8 @@ function ProcessRequest($page){
                         RemoveProductFromCart($productId);
                         break;
                     case "AddProductToDatabase":
-                        $productsId = GetPostVar("data");
-                        AddProductToDatabase($productsId);
+                        //$productsId = GetPostVar("data");
+                        AddProductToDatabase(/*productsId*/);
                         break;
                 }
             break;

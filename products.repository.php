@@ -43,7 +43,6 @@ function GetProductById($productId){
 
 function SaveOrder($userId, $productId){
     $conn = ConnectDB();
-    //var_dump($productId);
     try {
         $userId = $conn->real_escape_string($userId);
         $productId = $conn->real_escape_string($productId);

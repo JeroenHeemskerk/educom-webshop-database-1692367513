@@ -3,7 +3,6 @@ include_once 'sessions.php';
 function ShowShoppingCart(){
     $cart = getCart();
     $totaal = 0;
-    $productsid = array();
     $cartkeys = array_keys($cart);
     foreach ($cartkeys as $key) {
         $product = GetProductById($key);
@@ -21,11 +20,9 @@ function ShowShoppingCart(){
         }
     }
     echo '<p>eindbedrag: '; echo $totaal; echo' euro</p>';
-    var_dump($productsid);
     if(!empty($cartkeys)){echo '
         <form action="index.php" method="post">
         <input type="hidden" name="page" value="shoppingcart">
-        <input type="hidden" name="productsid[]" value="';echo $productsid ;echo'">
         <input type="hidden" name="action" value="AddProductToDatabase">
         <input type="submit" value="afrekenen">
         </form>';

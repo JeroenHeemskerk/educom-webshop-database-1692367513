@@ -9,12 +9,14 @@ function SearchForProductById($productId){
     $product = GetProductById($productId);
     return $product;
 }
-function AddProductToDatabase($productsId){
+function AddProductToDatabase(){
     $userId = getLogInUserId();
-    //var_dump($productsId);
-    //foreach($productsId as $productId){
-        //var_dump($productId);
-        SaveOrder($userId, $productsId);
-    //}
+    $products = getCart();
+    $productsId = array_keys($products);
+        foreach($productsId as $productId){
+            for($i=0; $i < $products[$productId]; $i++){
+                SaveOrder($userId, $productId);
+            }
+        }
     CleanCart();
 }
